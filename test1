@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Political Map of Europe</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+        .left { background-color: red; }
+        .centre { background-color: orange; }
+        .right { background-color: blue; }
+    </style>
+</head>
+<body>
+    <h1>Political Map of Europe</h1>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([54.5260, 15.2551], 4); // Center on Europe
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var countries = [
+            { name: "France", headOfState: "Emmanuel Macron", alignment: "centre", lat: 46.603354, lon: 1.888334 },
+            { name: "Germany", headOfState: "Frank-Walter Steinmeier", alignment: "centre-right", lat: 51.165691, lon: 10.451526 },
+            { name: "Spain", headOfState: "Pedro Sánchez", alignment: "centre-left", lat: 40.463667, lon: -3.74922 },
+            // Add more countries here
+        ];
+
+        countries.forEach(function(country) {
+            var color = getColorByPoliticalAlignment(country.alignment);
+            var marker = L.circleMarker([country.lat, country.lon], {
+                color: color,
+                fillColor: color,
+                fillOpacity: 0.5,
+                radius: 10
+            }).addTo(map);
+
+            marker.bindPopup("<b>" + country.name + "</b><br>Head of State: " + country.headOfState + "<br>Alignment: " + country.alignment);
+        });
+
+        function getColorByPoliticalAlignment(alignment) {
+            switch (alignment.toLowerCase()) {
+                case 'left': return 'red';
+                case 'centre': return 'orange';
+                case 'centre-left': return 'yellow';
+                case 'centre-right': return 'lightblue';
+                case 'right': return 'blue';
+                default: return 'gray';
+            }
+        }
+    </script>
+</body>
+</html>        
